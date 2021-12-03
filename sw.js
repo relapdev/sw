@@ -33,7 +33,7 @@ self.addEventListener("fetch", (event) => {
 
     event.respondWith(
         caches.match(event.request)
-            .then((resp) => resp.json())
+            .then((resp) => resp ? resp.json() : {uid: ''})
             .then((resp)=> {
                 console.log("!!!!! event.request", resp);
                 return (
