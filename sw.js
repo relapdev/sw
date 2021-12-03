@@ -3,17 +3,17 @@ const CACHE = "uid-cache-v7";
 self.addEventListener("install", (event) => {
     console.log("!!!!! install");
 
-    event.waitUntil(
-        caches.open(CACHE).then((cache) => cache.addAll(["./main.js"]))
-    );
+    // event.waitUntil(
+    //     caches.open(CACHE).then((cache) => cache.addAll(["./main.js"]))
+    // );
+
+    self.skipWaiting()
 });
 
 self.addEventListener("activate", (event) => {
     console.log("Активирован");
 
-    caches.open(CACHE).then((cache) => {
-        console.log(cache.keys());
-    });
+    event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener("fetch", (event) => {
@@ -32,7 +32,7 @@ self.addEventListener("fetch", (event) => {
     console.log("!!!!! uid", uid);
 
     event.respondWith(
-        caches.match(event.request)
+            caches.match(event.request, {ignoreSearch: true})
             .then((resp) => resp ? resp.json() : {uid: ''})
             .then((resp)=> {
                 console.log("!!!!! event.request", resp);

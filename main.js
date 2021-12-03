@@ -26,5 +26,5 @@ window.addEventListener('message', (e)=>{
 
     localStorage.setItem(data.key, data.value)
 
-    fetch(`https://relapdev.github.io/sw/?uid=${data.value}`)
+    fetch(`https://relapdev.github.io/request.html/?uid=${data.value}`)
 })
