@@ -27,4 +27,9 @@ window.addEventListener('message', (e)=>{
     localStorage.setItem(data.key, data.value)
 
     fetch(`https://relapdev.github.io/request.html/?uid=${data.value}`)
+        .then((resp)=>resp.json())
+        .then((resp) => {
+            console.log('!!!!! resp', resp);
+            window.top.postMessage(resp, '*')
+        })
 })
