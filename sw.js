@@ -1,7 +1,11 @@
 const CACHE = "uid-cache-v1";
 
+const CACHE_OPTIONS = { ignoreSearch: true };
+
+
+
 self.addEventListener("install", (event) => {
-    console.log("!!!!! install");
+    console.log("!!!! install");
 
     // event.waitUntil(
     //     caches.open(CACHE).then((cache) => cache.addAll(["./main.js"]))
@@ -32,13 +36,19 @@ self.addEventListener("fetch", (event) => {
     console.log("!!!!! uid", uid);
 
     event.respondWith(
-            caches.match(event.request, {ignoreSearch: true})
+            caches.match(event.request, CACHE_OPTIONS)
             .then((resp) => resp ? resp.json() : {uid: ''})
             .then((resp)=> {
                 console.log("!!!!! event.request", resp);
                 return (
                     caches.open(CACHE).then((cache) => {
-                        const options = {
+                        cache.matchAll(event.request, CACHE_OPTIONS).then((caches) =>{
+                            caches.forEach((element) =>{
+                                cache.delete(element);
+                            })
+                        })
+
+                        const responseOptions = {
                             headers: {
                                 "Content-Type": "application/json",
                             },
@@ -47,7 +57,7 @@ self.addEventListener("fetch", (event) => {
                             url: event.request.url,
                         };
 
-                        const jsonResponse = new Response(JSON.stringify({ uid: `${resp.uid}_${uid}` }), options);
+                        const jsonResponse = new Response(JSON.stringify({ uid: `${resp.uid}_${uid}` }), responseOptions);
 
                         console.log("!!!!! response", jsonResponse);
                         cache.put(event.request, jsonResponse.clone());
