@@ -32,27 +32,28 @@ self.addEventListener("fetch", (event) => {
     console.log("!!!!! uid", uid);
 
     event.respondWith(
-        caches.match(event.request).then((resp) => {
-            console.log("!!!!! event.request", resp);
-            return (
-                resp ||
-                caches.open(CACHE).then((cache) => {
-                    const options = {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        status: 200,
-                        ok: true,
-                        url: event.request.url,
-                    };
+        caches.match(event.request)
+            .then((resp) => resp.json())
+            .then((resp)=> {
+                console.log("!!!!! event.request", resp);
+                return (
+                    caches.open(CACHE).then((cache) => {
+                        const options = {
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            status: 200,
+                            ok: true,
+                            url: event.request.url,
+                        };
 
-                    const jsonResponse = new Response(JSON.stringify({ uid }), options);
+                        const jsonResponse = new Response(JSON.stringify({ uid: `${resp.uid}_${uid}` }), options);
 
-                    console.log("!!!!! response", jsonResponse);
-                    cache.put(event.request, jsonResponse.clone());
-                    return jsonResponse;
-                })
-            );
+                        console.log("!!!!! response", jsonResponse);
+                        cache.put(event.request, jsonResponse.clone());
+                        return jsonResponse;
+                    })
+                );
         })
     );
 
