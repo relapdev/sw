@@ -1,4 +1,4 @@
-const CACHE = "uid-cache-v6";
+const CACHE = "uid-cache-v7";
 
 self.addEventListener("install", (event) => {
     console.log("!!!!! install");
