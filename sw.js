@@ -44,7 +44,7 @@ self.addEventListener("fetch", (event) => {
                     caches.open(CACHE).then((cache) => {
                         cache.matchAll(event.request, CACHE_OPTIONS).then((caches) =>{
                             caches.forEach((element) =>{
-                                cache.delete(element);
+                                cache.delete(element, CACHE_OPTIONS);
                             })
                         })
 
