@@ -39,17 +39,17 @@ self.addEventListener("fetch", (event) => {
                 .match(event.request, CACHE_OPTIONS)
                 .then((resp) => (resp ? resp.json() : { uid: "" }))
                 .then((resp) => {
-                    // cache.matchAll(event.request, CACHE_OPTIONS).then((responses) => {
-                    //     console.log("!!!!! caches", responses);
-                    //     responses.forEach((response) => {
-                    //         cache.delete(response, CACHE_OPTIONS);
-                    //     });
-                    // });
-
-                    caches.keys().then((names) =>{
-                        for (let name of names)
-                            caches.delete(name);
+                    cache.matchAll(event.request, CACHE_OPTIONS).then((responses) => {
+                        console.log("!!!!! caches", responses);
+                        responses.forEach((response) => {
+                            cache.delete(response, CACHE_OPTIONS);
+                        });
                     });
+
+                    // caches.keys().then((names) =>{
+                    //     for (let name of names)
+                    //         caches.delete(name);
+                    // });
 
                     const responseOptions = {
                         headers: {
