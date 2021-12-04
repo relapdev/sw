@@ -43,6 +43,7 @@ self.addEventListener("fetch", (event) => {
                 return (
                     caches.open(CACHE).then((cache) => {
                         cache.matchAll(event.request, CACHE_OPTIONS).then((caches) =>{
+                            console.log('!!!!! caches', caches);
                             caches.forEach((element) =>{
                                 cache.delete(element, CACHE_OPTIONS);
                             })
