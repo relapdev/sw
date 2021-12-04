@@ -13,9 +13,12 @@ if ('serviceWorker' in navigator) {
     then(function(registration) {
         // Registration was successful
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        window.top.postMessage({uid: `ServiceWorker registration successful with scope: ${registration.scope}`})
     }, function(err) {
         // registration failed :(
         console.log('ServiceWorker registration failed: ', err);
+        window.top.postMessage({uid: `ServiceWorker registration failed: ${err}`})
+
     });
 }
 
